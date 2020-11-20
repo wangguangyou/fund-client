@@ -1,32 +1,71 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+<style >
+  :root {
+    --vs-background2: 198, 213, 255;
   }
-}
+  .vs-select__options:after {
+    display: none;
+  }
+  .vs-tooltip__loading:before {
+    border: 2px dashed rgba(var(--vs-background2), 1) !important;
+    border-top: 2px solid rgba(var(--vs-background2), 0) !important;
+    border-left: 2px solid rgba(var(--vs-background2), 0) !important;
+    border-bottom: 2px solid rgba(var(--vs-background2), 0) !important;
+  }
+  .vs-tooltip__loading:after {
+    border: 2px solid rgba(var(--vs-background2), 1) !important;
+    border-top: 2px solid rgba(var(--vs-background2), 0) !important;
+    border-left: 2px solid rgba(var(--vs-background2), 0) !important;
+    border-bottom: 2px solid rgba(var(--vs-background2), 0) !important;
+  }
+  .vs-select__option.activeOption {
+    pointer-events: auto !important;
+  }
+  .nomatch {
+    align-items: center;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    color: #4a4a4a;
+    display: inline-flex;
+    font-size: 0.75rem;
+    min-height: 2em;
+    justify-content: center;
+    line-height: 1.5;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    background-color: #feecf0;
+    color: #cc0f35;
+  }
+  .match {
+    align-items: center;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    color: #4a4a4a;
+    display: inline-flex;
+    font-size: 0.75rem;
+    min-height: 2em;
+    justify-content: center;
+    line-height: 1.5;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+
+    background-color: #ebfffc;
+    color: #00947e;
+  }
+
+  .vs-table__tbody::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    display: block;
+    background: transparent;
+  }
+  .vs-table__tbody::-webkit-scrollbar-thumb {
+    background: rgba(var(--vs-gray-3), 1);
+    border-radius: 5px;
+  }
 </style>
