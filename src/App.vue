@@ -5,6 +5,11 @@
 </template>
 
 <style >
+  html,
+  body,
+  #app {
+    height: 100%;
+  }
   :root {
     --vs-background2: 198, 213, 255;
   }
@@ -65,6 +70,17 @@
     background: transparent;
   }
   .vs-table__tbody::-webkit-scrollbar-thumb {
+    background: rgba(var(--vs-gray-3), 1);
+    border-radius: 5px;
+  }
+
+  *::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    display: block;
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
     background: rgba(var(--vs-gray-3), 1);
     border-radius: 5px;
   }

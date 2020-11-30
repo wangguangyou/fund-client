@@ -25,7 +25,7 @@
       <div>
       </div>
       <div style="width:200px;text-align:right">
-        <vs-button @click="re" color="#7d33ff" gradient style="display: inline-block;min-width: 40px" animation-type="scale">
+        <vs-button @click="re" color="#7d33ff" transparent style="display: inline-block">
           <i class='bx bx-revision'></i>
           <template #animate>
             刷新
@@ -33,7 +33,7 @@
         </vs-button>
       </div>
     </div>
-    <TheTable ref="TheTable"></TheTable>
+    <TheTable style="overflow: auto;height: calc(100vh - 160px);" ref="TheTable"></TheTable>
 
   </div>
 </template>
@@ -125,6 +125,7 @@
 
 <style lang="less" scoped>
   .container {
+    height: 100%;
     padding: 10px;
   }
   .form {

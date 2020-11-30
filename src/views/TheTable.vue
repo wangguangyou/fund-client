@@ -1,6 +1,7 @@
 <template>
-  <div class="vs-select__options__content" style="max-height: calc(100vh - 180px)">
-    <vs-table ref="table" striped>
+  <!-- <div class="vs-select__options__content" style="max-height: calc(100vh - 180px)"> -->
+  <div>
+    <vs-table ref="table">
       <template #thead>
         <vs-tr>
           <vs-th>
@@ -21,7 +22,8 @@
         </vs-tr>
       </template>
       <template #tbody>
-        <vs-tr :key="i" v-for="(tr, i) in  $vs.getPage(tableData, page, max) " :data="tr">
+        <!-- <vs-tr :key="i" v-for="(tr, i) in  $vs.getPage(tableData, page, max) " :data="tr"> -->
+        <vs-tr :key="i" v-for="(tr, i) in  tableData" :data="tr">
 
           <vs-td>
             {{ tr.name }}
@@ -36,15 +38,21 @@
             {{ tr.gztime }}
           </vs-td>
           <vs-td>
-            <vs-button @click="deleteFund(tr)" gradient style="min-width: 60px" danger animation-type="scale">
+            <vs-button @click="deleteFund(tr)" danger transparent>
               <i class='bx bx-trash'></i>
               <template #animate>
                 删除
               </template>
             </vs-button>
+            <!-- <vs-button @click="deleteFund(tr)" gradient style="min-width: 60px" danger animation-type="scale">
+              <i class='bx bx-trash'></i>
+              <template #animate>
+                删除
+              </template>
+            </vs-button> -->
           </vs-td>
           <template #expand>
-            <div class="con-content">
+            <div v-if="tr.details" class="con-content">
               <div>
                 <span class="label">近一年收益率</span>
                 <span :class="`${tr.details.syl_1n>0?'nomatch':'match'}`">{{tr.details.syl_1n}}%</span>
@@ -69,9 +77,9 @@
       <template #notFound>
         请添加基金
       </template>
-      <template #footer>
+      <!-- <template #footer>
         <vs-pagination v-model="page" :length="$vs.getLength(tableData, max)" />
-      </template>
+      </template> -->
     </vs-table>
   </div>
 </template>
