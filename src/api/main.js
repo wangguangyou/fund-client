@@ -22,6 +22,9 @@ export const getFundView = (code) => {
 export const getFundDetails = (code) => {
   return superagent.get(`http://fund.eastmoney.com/pingzhongdata/${code}.js`)
 }
+export const getFundVarietieValuationDetail = (code) => {
+  return superagent.get(`https://fundmobapi.eastmoney.com/FundMApi/FundVarietieValuationDetail.ashx?FCODE=${code}&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&_=${Date.now()}`)
+}
 // export const searchFund = (params) => GET(
 //   `https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx`,
 //   Object.assign({

@@ -1,6 +1,14 @@
 <template>
-  <!-- <div class="vs-select__options__content" style="max-height: calc(100vh - 180px)"> -->
   <div>
+    <vs-dialog width="550px" not-center v-model="dialogActive">
+        <template #header>
+          <h4 class="not-margin" v-if="currentTr">
+            {{currentTr.name}}
+          </h4>
+        </template>
+        <FundChart :tr="currentTr"></FundChart>
+      </vs-dialog>
+
     <vs-table ref="table">
       <template #thead>
         <vs-tr>
@@ -16,7 +24,7 @@
           <vs-th>
             更新时间
           </vs-th>
-          <vs-th>
+          <vs-th style="width:120px">
             操作
           </vs-th>
         </vs-tr>
@@ -38,12 +46,21 @@
             {{ tr.gztime }}
           </vs-td>
           <vs-td>
-            <vs-button @click="deleteFund(tr)" danger transparent>
+            <div style="min-width:105px;display: flex;align-items: center; justify-content: center;flex-wrap: wrap;">
+            <vs-button @click.stop="getFundChart(tr)"  transparent>
+              <i class='bx bx-line-chart'></i>
+              <template #animate>
+                详情
+              </template>
+            </vs-button>
+            <vs-button @click.stop="deleteFund(tr)" danger transparent>
               <i class='bx bx-trash'></i>
               <template #animate>
                 删除
               </template>
             </vs-button>
+            </div>
+
             <!-- <vs-button @click="deleteFund(tr)" gradient style="min-width: 60px" danger animation-type="scale">
               <i class='bx bx-trash'></i>
               <template #animate>
@@ -86,19 +103,26 @@
 
 <script>
   import { getFundView, getFundDetails } from '@/api/main'
+  import FundChart from './FundChart'
   export default {
     name: 'TheTable',
-    components: {},
+    components: {FundChart},
     props: [],
     data() {
       return {
+        dialogActive:false,
         page: 1,
         max: 5,
-        tableData: []
+        tableData: [],
+        currentTr:null
       }
     },
     mounted() { },
     methods: {
+      getFundChart(tr){
+        this.currentTr = tr
+        this.dialogActive = true
+      },
       deleteFund(item) {
         this.$store.commit('setFundList', Object({ CODE: item.fundcode }, item))
 
@@ -166,6 +190,8 @@
 </script>
 
 <style lang="less" scoped>
+
+
   .con-content {
     font-size: 12px;
     display: flex;
