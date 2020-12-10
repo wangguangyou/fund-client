@@ -1,5 +1,5 @@
 <template>
-  <div style="height:300px" id="fund-container">
+  <div style="height:350px" id="fund-container">
   </div>
 </template>
 
@@ -11,7 +11,9 @@
     components: {},
     props: ['tr'],
     data() {
-      return {}
+      return {
+        chart: null
+      }
     },
     mounted() {
       this.$nextTick(_ => {
@@ -19,54 +21,55 @@
       })
     },
     methods: {
-    async  init() {
-        console.log('init')
+      async getData() {
         let data = []
         let DWJZ = 0
         let res = await getFundVarietieValuationDetail(this.tr.fundcode)
-        if(res&&res.text){
+
+        if (res && res.text) {
           try {
-           let json =  JSON.parse(res.text)
-           data =  json.Datas.map(item=>item.split(','))
+            let json = JSON.parse(res.text)
+            data = json.Datas.map(item => item.split(','))
             DWJZ = +json.Expansion.DWJZ;
-            console.log(DWJZ)
           } catch (error) {
-            
+
           }
         }
-         console.log(data)
-        // if (this.chart) {
-        //   this.chart.changeData(this.cData)
-        //   return
-        // }
-        const chart = new Chart({
+        return {
+          data: data.map(item => {
+            return {
+              date: item[1],
+              rate: +item[2],
+              value: +item[2],
+            }
+          }), DWJZ
+        }
+      },
+      async init() {
+        let { data, DWJZ } = await this.getData()
+        if (this.chart) {
+          return this.chart.changeData(data)
+        }
+        const chart = this.chart = new Chart({
           container: 'fund-container',
           autoFit: true,
-          height: 250,
-          padding: [20, 60,50, 80]
+          height: 300,
+          padding: [20, 60, 50, 80]
         });
-        data = data.map(item=>{
-          return {
-            date:item[1],
-            rate:+item[2],
-            value:+item[2],
-            // value:(DWJZ * (1 + 0.01 * (+item[2]))).toFixed(4)
-          }
-        })
-        console.log(data)
+
         chart.data(data);
         chart.scale(
           {
             date: {
-              type:'cat'
+              type: 'cat'
             },
-            rate:{
-              formatter:(v)=>(+v).toFixed(2)+'%',
-              alias:'涨幅',
+            rate: {
+              formatter: (v) => (+v).toFixed(2) + '%',
+              alias: '涨幅',
             },
-            value:{
-              alias:'净值',
-              formatter:(v)=>(DWJZ * (1 + 0.01 * (v))).toFixed(4)
+            value: {
+              alias: '净值',
+              formatter: (v) => (DWJZ * (1 + 0.01 * (v))).toFixed(4)
             }
           },
           // {
@@ -91,24 +94,20 @@
           .line()
           .position('date*value')
           .shape('smooth');
-
         chart
-          .point()
+          .line()
           .position('date*rate')
-        //   // .color('name')
           .shape('smooth');
 
         chart.render();
+        const timeOutId = window.setTimeout(async _ => {
+          this.init()
+        }, 10000)
+        this.$once('hook:beforeDestory', () => {
+          window.clearTimeout(timeOutId)
+        })
       },
     },
-    computed: {},
-    watch: {
-      cData(val) {
-        this.$nextTick(_ => {
-          val && this.init()
-        })
-      }
-    }
   }
 </script>
 

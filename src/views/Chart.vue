@@ -8,7 +8,7 @@
   export default {
     name: '',
     components: {},
-    props: ['cData'],
+    props: ['cData', 'prec'],
     data() {
       return {}
     },
@@ -19,16 +19,11 @@
     },
     methods: {
       init() {
-        console.log('init')
-        // if (this.chart) {
-        //   this.chart.changeData(this.cData)
-        //   return
-        // }
         const chart = new Chart({
           container: 'line-container',
           autoFit: true,
           height: 250,
-          padding: [20, 20, 20, 80]
+          padding: [20, 50, 20, 80]
         });
         chart.data(this.cData);
 
@@ -36,7 +31,13 @@
           showCrosshairs: true,
           shared: true,
         });
-
+        chart.scale(
+          {
+            value: {
+              alias: '净值'
+            }
+          }
+        );
         // chart.axis('date', {
         //   label: {
         //     formatter: (val) => {

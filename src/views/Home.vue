@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Info :cData="cData" :info="info"></Info>
+    <Info :prec="prec" :cData="cData" :info="info"></Info>
     <div class="form">
       <vs-tooltip bottom shadow not-hover v-model="activeTooltip" :loading="tooltipLoading">
         <vs-input @input="onInput" @focus="onFocus" @blur="onBlur" @click-icon="onClickIcon" style="width:200px" shadow icon-after v-model="code" label-placeholder="请输入基金代码、名称">
@@ -48,6 +48,7 @@
     props: [],
     data() {
       return {
+        prec: 0,
         timeoutId: '',
         hidden: true,
         activeTooltip: false,
@@ -80,10 +81,10 @@
         sh = JSON.parse(sh.text)
         console.log(sh)
         sh = sh.data.sh000001
+        this.prec = sh.prec
         this.info = sh.qt.sh000001
         console.log(this.info)
-        this.cData = sh.day.map(item => ({ date: item[0], value: +item[2] }))
-
+        this.cData = sh.day.map(item => ({ date: item[0], value: +item[2], rate: +item[2] }))
         this.timeoutId = window.setTimeout(_ => {
           this.getSh()
         }, 100000)

@@ -25,6 +25,22 @@ export const getFundDetails = (code) => {
 export const getFundVarietieValuationDetail = (code) => {
   return superagent.get(`https://fundmobapi.eastmoney.com/FundMApi/FundVarietieValuationDetail.ashx?FCODE=${code}&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&_=${Date.now()}`)
 }
+export const getFundLjsy = (code, sltTimeRange) => {
+  let url = `https://fundmobapi.eastmoney.com/FundMApi/FundYieldDiagramNew.ashx?FCODE=${code
+}&RANGE=${sltTimeRange
+}&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&_=${Date.now()}`;
+  return superagent.get(url)
+}
+export const getFundYjzs = (code, sltTimeRange) => {
+  let url = `https://fundmobapi.eastmoney.com/FundMApi/FundNetDiagram.ashx?FCODE=${
+    code
+  }&RANGE=${
+    sltTimeRange
+  }&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&_=${new Date().getTime()}`;
+  console.log(url)
+  return superagent.get(url)
+
+}
 // export const searchFund = (params) => GET(
 //   `https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx`,
 //   Object.assign({

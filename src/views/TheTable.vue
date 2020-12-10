@@ -1,13 +1,18 @@
 <template>
   <div>
     <vs-dialog width="550px" not-center v-model="dialogActive">
-        <template #header>
-          <h4 class="not-margin" v-if="currentTr">
-            {{currentTr.name}}
-          </h4>
-        </template>
-        <FundChart :tr="currentTr"></FundChart>
-      </vs-dialog>
+      <template #header>
+        <h4 class="not-margin" v-if="currentTr">
+          {{currentTr.name}}
+        </h4>
+      </template>
+      <Tabs :currentTab="currentTab" :tabs="tabs" @onClick="handleClick">
+      </Tabs>
+      <template v-if="dialogActive">
+        <FundChart v-if="currentTab=='tab1'" :tr="currentTr"></FundChart>
+        <FundLJSYChart v-else :tr="currentTr"></FundLJSYChart>
+      </template>
+    </vs-dialog>
 
     <vs-table ref="table">
       <template #thead>
@@ -24,7 +29,7 @@
           <vs-th>
             更新时间
           </vs-th>
-          <vs-th style="width:120px">
+          <vs-th>
             操作
           </vs-th>
         </vs-tr>
@@ -32,7 +37,6 @@
       <template #tbody>
         <!-- <vs-tr :key="i" v-for="(tr, i) in  $vs.getPage(tableData, page, max) " :data="tr"> -->
         <vs-tr :key="i" v-for="(tr, i) in  tableData" :data="tr">
-
           <vs-td>
             {{ tr.name }}
           </vs-td>
@@ -47,18 +51,18 @@
           </vs-td>
           <vs-td>
             <div style="min-width:105px;display: flex;align-items: center; justify-content: center;flex-wrap: wrap;">
-            <vs-button @click.stop="getFundChart(tr)"  transparent>
-              <i class='bx bx-line-chart'></i>
-              <template #animate>
-                详情
-              </template>
-            </vs-button>
-            <vs-button @click.stop="deleteFund(tr)" danger transparent>
-              <i class='bx bx-trash'></i>
-              <template #animate>
-                删除
-              </template>
-            </vs-button>
+              <vs-button @click.stop="getFundChart(tr)" transparent>
+                <i class='bx bx-line-chart'></i>
+                <template #animate>
+                  详情
+                </template>
+              </vs-button>
+              <vs-button @click.stop="deleteFund(tr)" danger transparent>
+                <i class='bx bx-trash'></i>
+                <template #animate>
+                  删除
+                </template>
+              </vs-button>
             </div>
 
             <!-- <vs-button @click="deleteFund(tr)" gradient style="min-width: 60px" danger animation-type="scale">
@@ -102,24 +106,32 @@
 </template>
 
 <script>
+  import Tabs from 'vue-tabs-with-active-line'
   import { getFundView, getFundDetails } from '@/api/main'
+  import FundLJSYChart from './FundLJSYChart'
   import FundChart from './FundChart'
   export default {
     name: 'TheTable',
-    components: {FundChart},
+    components: { FundLJSYChart, Tabs, FundChart },
     props: [],
     data() {
       return {
-        dialogActive:false,
+        dialogActive: false,
         page: 1,
         max: 5,
         tableData: [],
-        currentTr:null
+        currentTr: null,
+        currentTab: 'tab1',
+        tabs: [{ title: '净值估算', value: 'tab1' }, { title: '业绩走势', value: 'tab2S' }]
       }
     },
     mounted() { },
     methods: {
-      getFundChart(tr){
+      handleClick(tab) {
+        console.log(tab)
+        this.currentTab = tab
+      },
+      getFundChart(tr) {
         this.currentTr = tr
         this.dialogActive = true
       },
@@ -136,6 +148,7 @@
         try {
           ress = await Promise.all(this.fundList.map(item => getFundView(item.CODE)))
         } catch (error) {
+          loading && loading.close()
           console.log(error)
         }
         console.log(ress)
@@ -188,10 +201,62 @@
     }
   }
 </script>
+<style>
+  .tabs {
+    position: relative;
+    margin: 0 auto;
+    text-align: center;
+  }
 
+  .tabs__item {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 10px;
+    padding-bottom: 8px;
+    font-size: 14px;
+    letter-spacing: 0.8px;
+    color: gray;
+    text-decoration: none;
+    border: none;
+    background-color: transparent;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .tabs__item_active {
+    color: black;
+  }
+
+  .tabs__item:hover {
+    border-bottom: 2px solid gray;
+    color: black;
+  }
+
+  .tabs__item:focus {
+    outline: none;
+    border-bottom: 2px solid gray;
+    color: black;
+  }
+
+  .tabs__item:first-child {
+    margin-left: 0;
+  }
+
+  .tabs__item:last-child {
+    margin-right: 0;
+  }
+
+  .tabs__active-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background-color: black;
+    transition: transform 0.4s ease, width 0.4s ease;
+  }
+</style>
 <style lang="less" scoped>
-
-
   .con-content {
     font-size: 12px;
     display: flex;
