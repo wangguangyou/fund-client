@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vs-dialog width="550px" not-center v-model="dialogActive">
+    <vs-dialog overflow-hidden width="550px" not-center v-model="dialogActive">
       <template #header>
         <h4 class="not-margin" v-if="currentTr">
           {{currentTr.name}}

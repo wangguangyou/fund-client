@@ -19,6 +19,7 @@
     props: ['tr'],
     data() {
       return {
+        currentDwjz: null,
         chart: null,
         picked: 'y',
         options: [{ label: '近1月', value: 'y' }, { label: '近3月', value: '3y' }, { label: '近6月', value: '6y' }, { label: '近1年', value: 'n' }, { label: '近3年', value: '3n' }]
@@ -50,8 +51,10 @@
       },
       async init() {
         let data = await this.getData()
+        this.currentDwjz = data[0].DWJZ
         console.log(data)
         if (this.chart) {
+
           return this.chart.changeData(data)
         }
         const chart = this.chart = new Chart({
@@ -68,7 +71,7 @@
               type: 'cat'
             },
             DWJZ: {
-              formatter: (v) => ((v - data[0].DWJZ) / data[0].DWJZ * 100).toFixed(2) + '%',
+              formatter: (v) => ((v - this.currentDwjz) / this.currentDwjz * 100).toFixed(2) + '%',
               alias: '涨幅',
             },
             // value: {
