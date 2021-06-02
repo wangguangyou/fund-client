@@ -1,5 +1,7 @@
 # fund-client
 
+![info.png](https://i.loli.net/2021/06/02/jF3qa4gzWprovmO.png)
+
 ## Project setup
 ```
 npm install
